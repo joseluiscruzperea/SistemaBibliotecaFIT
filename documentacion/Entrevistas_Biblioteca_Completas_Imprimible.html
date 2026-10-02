@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Compendio de Entrevistas - Sistema Integral de Biblioteca FIT UAT</title>
+    <style>
+        @page {
+            size: letter;
+            margin: 20mm 15mm 20mm 15mm;
+        }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #2D3748;
+            line-height: 1.5;
+            background-color: #F7FAFC;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #0B2F4C;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        .header h1 {
+            color: #0B2F4C;
+            font-size: 20px;
+            margin: 0 0 6px 0;
+            text-transform: uppercase;
+        }
+        .header h2 {
+            color: #C53030;
+            font-size: 15px;
+            margin: 0;
+            font-weight: 600;
+        }
+        .header p {
+            color: #718096;
+            font-size: 12px;
+            margin: 4px 0 0 0;
+        }
+        .interview-card {
+            page-break-after: always;
+            margin-bottom: 40px;
+        }
+        .interview-title {
+            background-color: #0B2F4C;
+            color: white;
+            padding: 10px 15px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 4px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        .section-title {
+            color: #1A365D;
+            border-bottom: 2px solid #E2E8F0;
+            padding-bottom: 4px;
+            font-size: 14px;
+            margin-top: 18px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            font-size: 12px;
+        }
+        th, td {
+            border: 1px solid #CBD5E0;
+            padding: 7px 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #EDF2F7;
+            color: #2D3748;
+            font-weight: bold;
+            width: 32%;
+        }
+        .qa-block {
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+        .qa-q {
+            font-weight: bold;
+            color: #2B6CB0;
+            margin-bottom: 2px;
+        }
+        .qa-a {
+            color: #2D3748;
+            margin-left: 12px;
+            margin-bottom: 6px;
+        }
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #C53030;
+            color: white;
+            padding: 12px 20px;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        .print-btn:hover {
+            background-color: #9B1C1C;
+        }
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                padding: 0;
+                max-width: 100%;
+            }
+            .print-btn {
+                display: none;
+            }
+            .interview-card {
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">🖨️ Guardar o Imprimir en PDF</button>
+
+<div class="container">
+    <div class="header">
+        <h1>Universidad Autónoma de Tamaulipas · Facultad de Ingeniería (FIT)</h1>
+        <h2>Instrumento Integral de Entrevistas para Ingeniería de Requisitos y Análisis Orientado a Objetos</h2>
+        <p>Proyecto: Sistema Integral de Biblioteca (FIT) | Compendio Oficial de Entrevistas a Personal y Coordinadores</p>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- ENTREVISTA 1: JEFA DE BIBLIOTECA -->
+    <!-- =================================================================== -->
+    <div class="interview-card">
+        <div class="interview-title">1. Entrevista al Responsable: Getsel Giadans (Jefa de Biblioteca FIT)</div>
+        
+        <div class="section-title">Información General</div>
+        <table>
+            <tr><th>Campo</th><td>Detalle</td></tr>
+            <tr><th>Nombre del Proyecto</th><td>Sistema Integral de Biblioteca</td></tr>
+            <tr><th>Fecha</th><td>1/Octubre/2026</td></tr>
+            <tr><th>Entrevistado</th><td>Getsel Giadans (Jefa de Biblioteca)</td></tr>
+            <tr><th>Departamento</th><td>Biblioteca de la Facultad de Ingeniería (FIT)</td></tr>
+            <tr><th>Misión</th><td>Fomentar la investigación y lectura proporcionando acceso rápido, ordenado y confiable al acervo.</td></tr>
+            <tr><th>Personal</th><td>5 personas (4 operativos y 1 jefatura)</td></tr>
+            <tr><th>Herramientas actuales</th><td>Software de registro heredado y hojas de cálculo Excel para respaldos.</td></tr>
+            <tr><th>KPIs</th><td>Índice de morosidad de libros y rotación mensual del inventario.</td></tr>
+            <tr><th>Entrevistador</th><td>Luis Emanuel García Ángeles</td></tr>
+        </table>
+
+        <div class="section-title">Sección 1. Identificación del Problema</div>
+        <div class="qa-block">
+            <div class="qa-q">¿Cuál es el problema principal que desea resolver?</div>
+            <div class="qa-a">La inconsistencia en los datos del inventario y la dificultad para auditar los préstamos. No tenemos un control estadístico real de qué material se pierde o se retrasa.</div>
+            <div class="qa-q">¿Qué dificultades enfrenta actualmente?</div>
+            <div class="qa-a">Pérdida de seguimiento en alumnos morosos. El sistema actual no nos notifica cuando un préstamo ha vencido, hay que revisarlo manualmente en libretas o Excel.</div>
+            <div class="qa-q">¿Qué actividades consumen más tiempo?</div>
+            <div class="qa-a">La conciliación semestral del inventario y la identificación manual de deudores para bloquear sus trámites de titulación.</div>
+        </div>
+
+        <div class="section-title">Sección 10. Reglas de Negocio Oficiales Identificadas</div>
+        <table>
+            <tr><th>ID Regla</th><th>Descripción</th></tr>
+            <tr><td>RN-01</td><td>Un alumno puede solicitar un máximo de 3 ejemplares; un docente hasta 5 ejemplares.</td></tr>
+            <tr><td>RN-02</td><td>El plazo de préstamo es de 7 días para alumnos y 15 días para docentes.</td></tr>
+            <tr><td>RN-03</td><td>Los ejemplares clasificados como "Consulta Interna / Reserva" no pueden ser prestados a domicilio bajo ninguna circunstancia.</td></tr>
+            <tr><td>RN-04</td><td>La sanción económica aumenta $10 pesos por cada día hábil de retraso.</td></tr>
+            <tr><td>RN-05</td><td>Nadie puede titularse si tiene adeudos con la biblioteca (Carta de no adeudo obligatoria y bloqueada ante multas).</td></tr>
+        </table>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- ENTREVISTA 2: AUXILIAR DE MOSTRADOR -->
+    <!-- =================================================================== -->
+    <div class="interview-card">
+        <div class="interview-title">2. Entrevista a Trabajador 1: Mariana Rojas Valdés (Auxiliar de Mostrador)</div>
+        
+        <div class="section-title">Información General</div>
+        <table>
+            <tr><th>Entrevistada</th><td>Mariana Rojas Valdés (Auxiliar de Mostrador)</td></tr>
+            <tr><th>Misión</th><td>Atender a los estudiantes rápidamente, facilitarles el material y mantener los estantes organizados.</td></tr>
+            <tr><th>Indicadores</th><td>Cantidad de alumnos atendidos por turno y tiempos de espera en mostrador.</td></tr>
+        </table>
+
+        <div class="section-title">Sección 1 y 5. Problemas Operativos y Funcionalidades Requeridas</div>
+        <div class="qa-block">
+            <div class="qa-q">¿Cuál es el problema operativo principal?</div>
+            <div class="qa-a">El sistema se traba mucho. Cuando hay fila entre clases, el programa se queda "pensando" y los alumnos se desesperan. Necesitamos atender en menos de 1 minuto por alumno.</div>
+            <div class="qa-q">¿Qué operaciones deben automatizarse en pantalla?</div>
+            <div class="qa-a">Que la pantalla se ponga roja y suene si el alumno tiene libros vencidos (Semáforo verde/rojo). Un cuadro con foto para verificar al alumno. Atajos de teclado: Enter para guardar rápido y Esc para limpiar sin usar el mouse.</div>
+            <div class="qa-q">¿Cómo debe manejarse la fecha de devolución?</div>
+            <div class="qa-a">El sistema debe calcular automáticamente la fecha de entrega saltándose sábados y domingos (días hábiles).</div>
+            <div class="qa-q">¿Qué reporte necesita al final de su jornada?</div>
+            <div class="qa-a">Un corte de caja al final del turno con el total de multas cobradas en efectivo, con ticket imprimible o exportable.</div>
+            <div class="qa-q">¿Qué función de recuperación es crítica?</div>
+            <div class="qa-a">Botón "Deshacer último préstamo" instantáneo si por equivocación se escaneó un código de libro erróneo.</div>
+        </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- ENTREVISTA 3: ADMINISTRATIVO -->
+    <!-- =================================================================== -->
+    <div class="interview-card">
+        <div class="interview-title">3. Entrevista a Trabajador 2: Jesus Vazquez Salaña (Administrativo)</div>
+        
+        <div class="section-title">Información General y Diagnóstico</div>
+        <table>
+            <tr><th>Entrevistado</th><td>Jesus Vazquez Salaña (Administrativo de Biblioteca FIT)</td></tr>
+            <tr><th>Misión</th><td>Prestar servicio a los alumnos y ofrecer calidad de conocimiento en lectura y textos académicos.</td></tr>
+            <tr><th>Problema Clave</th><td>Congelamientos constantes y libros que aparecen como disponibles pero están prestados.</td></tr>
+        </table>
+
+        <div class="section-title">Requerimientos Clave del Negocio</div>
+        <div class="qa-block">
+            <div class="qa-q">¿Qué atributos y estados debe controlar el sistema para los libros?</div>
+            <div class="qa-a">ISBN, Título, Autor, Editorial, Cantidad de copias y ubicación en estante. Los ejemplares deben poder cambiar de estado a: Disponible, Prestado o En Reparación (cuando un alumno lo devuelve dañado).</div>
+            <div class="qa-q">¿Qué tiempo de respuesta es aceptable?</div>
+            <div class="qa-a">Búsquedas y registros en menos de 3 segundos en la red universitaria.</div>
+            <div class="qa-q">¿Qué reportes son prioritarios?</div>
+            <div class="qa-a">Libros más solicitados, listado de alumnos con multas pendientes e inventario general exportables a Excel y TXT/PDF.</div>
+        </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- ENTREVISTA 4: COORDINADOR INGENIERÍA CIVIL -->
+    <!-- =================================================================== -->
+    <div class="interview-card">
+        <div class="interview-title">4. Entrevista al Coordinador de Ingeniería Civil: M.I. Roberto Carlos Morales Ruiz</div>
+        
+        <div class="section-title">Información General</div>
+        <table>
+            <tr><th>Entrevistado</th><td>M.I. Roberto Carlos Morales Ruiz (Coordinador de Ingeniería Civil - FIT)</td></tr>
+            <tr><th>Misión</th><td>Formación de ingenieros civiles con infraestructura y acervo técnico actualizado en geotecnia, estructuras e hidráulica.</td></tr>
+            <tr><th>KPIs del Área</th><td>Índice de titulación, acreditación CACEI y disponibilidad de libros por programa académico.</td></tr>
+        </table>
+
+        <div class="section-title">Diagnóstico y Requerimientos de Ingeniería Civil</div>
+        <div class="qa-block">
+            <div class="qa-q">¿Qué problemática detecta en el acervo de Ingeniería Civil?</div>
+            <div class="qa-a">Los libros de Mecánica de Suelos, Concreto y Topografía son escasos y de alto costo. Tesistas y alumnos avanzados suelen retenerlos indebidamente semanas enteras. Además, manuales de normas técnicas que deben ser de Consulta Interna han salido por error a domicilio.</div>
+            <div class="qa-q">¿Qué funcionalidades requiere la Coordinación de Civil?</div>
+            <div class="qa-a">Filtrar catálogo y existencias por carrera (Ingeniería Civil), garantizar que los manuales de normas de construcción nunca tengan salida a domicilio (RN-03), y reportes estadísticos de demanda para fundamentar compras anuales de bibliografía.</div>
+        </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- ENTREVISTA 5: COORDINADORA INGENIERÍA INDUSTRIAL -->
+    <!-- =================================================================== -->
+    <div class="interview-card">
+        <div class="interview-title">5. Entrevista a la Coordinadora de Ingeniería Industrial: Dra. Claudia Patricia Garza Salinas</div>
+        
+        <div class="section-title">Información General</div>
+        <table>
+            <tr><th>Entrevistada</th><td>Dra. Claudia Patricia Garza Salinas (Coordinadora de Ingeniería Industrial - FIT)</td></tr>
+            <tr><th>Misión</th><td>Formación integral en optimización, manufactura esbelta, calidad, ergonomía y logística.</td></tr>
+            <tr><th>KPIs del Área</th><td>Acreditación CACEI, satisfacción de estudiantes y eficiencia en el uso de laboratorios.</td></tr>
+        </table>
+
+        <div class="section-title">Diagnóstico y Requerimientos de Ingeniería Industrial</div>
+        <div class="qa-block">
+            <div class="qa-q">¿Qué situación crítica ocurre en periodos de exámenes?</div>
+            <div class="qa-a">Cuellos de botella y filas masivas para títulos como Investigación de Operaciones y Control de Calidad. Se requiere que el mostrador atienda en menos de 1 minuto por alumno con escaneo rápido y validación instantánea.</div>
+            <div class="qa-q">¿Qué control específico de copias demanda su carrera?</div>
+            <div class="qa-a">Trazabilidad individual por código de barras de cada copia física. Si un libro se entrega deteriorado tras prácticas de laboratorio, debe poder catalogarse de inmediato como "En Reparación" sin desaparecer del inventario.</div>
+        </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- ENTREVISTA 6: COORDINADOR NEGOCIOS Y TECNOLOGÍAS -->
+    <!-- =================================================================== -->
+    <div class="interview-card">
+        <div class="interview-title">6. Entrevista al Coordinador de Negocios y Tecnologías: Mtro. Fernando Treviño Peña</div>
+        
+        <div class="section-title">Información General</div>
+        <table>
+            <tr><th>Entrevistado</th><td>Mtro. Fernando Treviño Peña (Coordinador de Lic. en Negocios y Tecnologías - FIT)</td></tr>
+            <tr><th>Misión</th><td>Formar especialistas en logística global, aduanas, finanzas y estrategia de negocios.</td></tr>
+            <tr><th>KPIs del Área</th><td>Eficiencia terminal, egresados titulados y control de trámites de residencias profesionales.</td></tr>
+        </table>
+
+        <div class="section-title">Diagnóstico y Requerimientos de Negocios</div>
+        <div class="qa-block">
+            <div class="qa-q">¿Cuál es el proceso que más retrasa a los alumnos de su carrera?</div>
+            <div class="qa-a">El peregrinaje para conseguir cartas físicas de "No Adeudo" para iniciar residencias o titulación. Frecuentemente los alumnos pierden días hábiles porque el sistema antiguo no cruzaba deudas con biblioteca.</div>
+            <div class="qa-q">¿Qué solución propone para el sistema?</div>
+            <div class="qa-a">Validación y emisión digital automática de la Constancia Oficial de No Adeudo Bibliográfico. Si el alumno tiene aunque sea $10 de multa pendiente o 1 libro sin entregar, el sistema debe bloquear la expedición de inmediato. Asimismo, las multas cobradas deben respaldarse en un arqueo y corte de caja foliado para auditoría financiera.</div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

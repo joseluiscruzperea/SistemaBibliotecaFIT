@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="fit.biblioteca.controlador.MainController"
+            stylesheets="@styles.css" prefHeight="740.0" prefWidth="1140.0">
+
+    <!-- BARRA SUPERIOR INSTITUCIONAL -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="header-bar">
+            <children>
+                <Label text="🏛️ UAT · FIT" styleClass="header-title" />
+                <Label text="|  SISTEMA INTEGRAL DE BIBLIOTECA (Civil · Industrial · Negocios · Dewey)" styleClass="header-subtitle" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Label fx:id="lblOperadorHeader" text="Operador: Mostrador FIT (Mariana Rojas / Jesus Vázquez)" style="-fx-text-fill: #E2E8F0; -fx-font-size: 12px;" />
+                <Label fx:id="lblFechaHeader" text="📅 02/10/2026" styleClass="header-badge" />
+            </children>
+        </HBox>
+    </top>
+
+    <!-- CUERPO PRINCIPAL CON TODAS LAS OBSERVACIONES INTEGRADAS -->
+    <center>
+        <TabPane fx:id="tabPanePrincipal" tabClosingPolicy="UNAVAILABLE">
+            <tabs>
+
+                <!-- TAB 1: VENTANILLA EXPRESS DE PRÉSTAMOS (2 DÍAS HÁBILES) -->
+                <Tab text="⚡ Ventanilla Express (Préstamos)">
+                    <content>
+                        <GridPane hgap="15.0" vgap="15.0">
+                            <padding>
+                                <Insets bottom="18.0" left="18.0" right="18.0" top="18.0" />
+                            </padding>
+                            <columnConstraints>
+                                <ColumnConstraints prefWidth="440.0" />
+                                <ColumnConstraints hgrow="ALWAYS" prefWidth="640.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints vgrow="ALWAYS" />
+                            </rowConstraints>
+                            <children>
+                                <!-- Panel de Captura Rápida (Izquierda) -->
+                                <VBox spacing="12.0" styleClass="card-panel" GridPane.columnIndex="0">
+                                    <children>
+                                        <Label text="ESCÁNER DE PRÉSTAMO (2 Días Hábiles · Fines de semana no cuentan)" styleClass="card-title" />
+                                        
+                                        <!-- Matrícula -->
+                                        <Label text="1. Matrícula del Alumno o Docente:" style="-fx-font-weight: bold; -fx-text-fill: #4A5568;" />
+                                        <HBox spacing="8.0">
+                                            <children>
+                                                <TextField fx:id="txtMatricula" promptText="Ej. 2021001, 2021002, 2022001, DOC-101..." 
+                                                           style="-fx-font-size: 14px; -fx-padding: 7;" HBox.hgrow="ALWAYS"
+                                                           onKeyPressed="#onMatriculaKeyPressed" />
+                                                <Button text="🔍 Validar" onAction="#onValidarMatriculaClick" styleClass="btn-primary" />
+                                            </children>
+                                        </HBox>
+                                        <Label fx:id="lblUsuarioInfo" text="Esperando escaneo de credencial..." style="-fx-text-fill: #718096; -fx-font-style: italic;" />
+                                        
+                                        <Separator />
+
+                                        <!-- Folio Tarjeta / Código Libro -->
+                                        <Label text="2. Folio de Tarjeta Dewey o Código del Libro:" style="-fx-font-weight: bold; -fx-text-fill: #4A5568;" />
+                                        <HBox spacing="8.0">
+                                            <children>
+                                                <TextField fx:id="txtCodigoBarras" promptText="Ej. TARJ-0001, CIV-101, IND-101, NEG-101..." 
+                                                           style="-fx-font-size: 14px; -fx-padding: 7;" HBox.hgrow="ALWAYS"
+                                                           onKeyPressed="#onCodigoBarrasKeyPressed" />
+                                                <Button text="🔍 Buscar" onAction="#onBuscarEjemplarClick" styleClass="btn-primary" />
+                                            </children>
+                                        </HBox>
+                                        <Label fx:id="lblLibroInfo" text="Esperando tarjeta o código de libro..." style="-fx-text-fill: #718096; -fx-font-style: italic;" />
+
+                                        <Separator />
+
+                                        <!-- Botones de Acción de Ventanilla -->
+                                        <HBox spacing="10.0">
+                                            <children>
+                                                <Button fx:id="btnRegistrarPrestamo" text="✔ REGISTRAR PRÉSTAMO [ENTER]" 
+                                                        onAction="#onRegistrarPrestamo" styleClass="btn-primary" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
+                                                <Button text="🧹 Limpiar [ESC]" onAction="#onLimpiarVentanilla" styleClass="btn-secondary" />
+                                            </children>
+                                        </HBox>
+
+                                        <!-- Botón Deshacer Último (CA-03) -->
+                                        <Button fx:id="btnDeshacerUltimo" text="↩ Deshacer Último Préstamo (CA-03)" 
+                                                onAction="#onDeshacerUltimo" styleClass="btn-danger" maxWidth="Infinity" />
+
+                                        <Label text="ℹ️ Regla: Si se presta el viernes se entrega el martes (2 días hábiles)." 
+                                               style="-fx-font-size: 11px; -fx-text-fill: #2B6CB0; -fx-font-style: italic;" />
+                                    </children>
+                                </VBox>
+
+                                <!-- Panel de Semáforo y Comprobante (Derecha) -->
+                                <VBox spacing="12.0" GridPane.columnIndex="1">
+                                    <children>
+                                        <!-- Semáforo Visual Operativo -->
+                                        <VBox fx:id="pnlSemaforo" alignment="CENTER" styleClass="semaforo-espera" spacing="5.0">
+                                            <children>
+                                                <Label fx:id="lblSemaforoTitulo" text="⚪ SEMÁFORO: EN ESPERA DE LECTURA" 
+                                                       style="-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #4A5568;" />
+                                                <Label fx:id="lblSemaforoDetalle" text="Escanee una credencial para validar en tiempo real solvencia, adeudos ($20/día) y límite de libros."
+                                                       wrapText="true" style="-fx-font-size: 12px; -fx-text-fill: #718096;" />
+                                            </children>
+                                        </VBox>
+
+                                        <!-- Ticket Virtual en Pantalla -->
+                                        <Label text="Comprobante Virtual de Salida en Pantalla:" styleClass="card-title" />
+                                        <TextArea fx:id="txtTicketVentanilla" editable="false" VBox.vgrow="ALWAYS"
+                                                  style="-fx-font-family: 'Courier New', monospace; -fx-font-size: 12px;" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </GridPane>
+                    </content>
+                </Tab>
+
+                <!-- TAB 2: PRÓRROGAS Y RENOVACIONES (SOLO CON MATRÍCULA) -->
+                <Tab text="⏱️ Prórrogas (Solo Matrícula)">
+                    <content>
+                        <VBox spacing="14.0">
+                            <padding>
+                                <Insets bottom="18.0" left="20.0" right="20.0" top="18.0" />
+                            </padding>
+                            <children>
+                                <HBox spacing="15.0" alignment="CENTER_LEFT" styleClass="card-panel">
+                                    <children>
+                                        <Label text="Matrícula del Lector (No requiere traer el libro físicamente):" style="-fx-font-weight: bold;" />
+                                        <TextField fx:id="txtMatriculaProrroga" promptText="Ej. 2021001, 2022001..." prefWidth="240.0" />
+                                        <Button text="🔍 Consultar Préstamos" onAction="#onConsultarProrrogaMatricula" styleClass="btn-primary" />
+                                        <Region HBox.hgrow="ALWAYS" />
+                                        <Label text="Política: Máximo 2 prórrogas de 2 días hábiles cada una." style="-fx-font-size: 12px; -fx-text-fill: #2B6CB0; -fx-font-weight: bold;" />
+                                    </children>
+                                </HBox>
+
+                                <Label text="Préstamos Activos Susceptibles de Renovación:" styleClass="card-title" />
+                                <TableView fx:id="tblPrestamosProrroga" prefHeight="260.0">
+                                    <columns>
+                                        <TableColumn fx:id="colProFolio" text="Folio Préstamo" prefWidth="120.0" />
+                                        <TableColumn fx:id="colProMat" text="Matrícula" prefWidth="100.0" />
+                                        <TableColumn fx:id="colProLector" text="Nombre Lector" prefWidth="200.0" />
+                                        <TableColumn fx:id="colProLibro" text="Título de la Obra" prefWidth="260.0" />
+                                        <TableColumn fx:id="colProTarjeta" text="Tarjeta Dewey" prefWidth="120.0" />
+                                        <TableColumn fx:id="colProFechaLim" text="Fecha Límite Actual" prefWidth="140.0" />
+                                        <TableColumn fx:id="colProProrrogas" text="Prórrogas (Máx 2)" prefWidth="130.0" />
+                                    </columns>
+                                </TableView>
+
+                                <HBox spacing="15.0" alignment="CENTER_LEFT">
+                                    <children>
+                                        <Button text="➕ Otorgar Prórroga (+2 Días Hábiles)" onAction="#onAplicarProrroga" styleClass="btn-success" />
+                                        <Label text="⚠️ Si ya se otorgaron 2 prórrogas, el sistema bloquea y exige la devolución física." 
+                                               style="-fx-text-fill: #C53030; -fx-font-size: 12px;" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </content>
+                </Tab>
+
+                <!-- TAB 3: DEVOLUCIONES Y MULTAS ($20/DÍA) -->
+                <Tab text="🔄 Devoluciones y Multas">
+                    <content>
+                        <VBox spacing="12.0">
+                            <padding>
+                                <Insets bottom="16.0" left="20.0" right="20.0" top="16.0" />
+                            </padding>
+                            <children>
+                                <!-- Panel de Escaneo de Devolución -->
+                                <HBox spacing="12.0" alignment="CENTER_LEFT" styleClass="card-panel">
+                                    <children>
+                                        <Label text="Folio Tarjeta o Código:" style="-fx-font-weight: bold;" />
+                                        <TextField fx:id="txtDevCodigoBarras" promptText="Ej. TARJ-0001 o CIV-101..." prefWidth="200.0" />
+                                        <Label text="Condición:" style="-fx-font-weight: bold;" />
+                                        <ComboBox fx:id="cbDevCondicion" prefWidth="150.0" />
+                                        <Label text="Simular Fecha Retorno:" style="-fx-font-weight: bold;" />
+                                        <DatePicker fx:id="dpDevFechaRetorno" prefWidth="130.0" />
+                                        <Button text="📥 Procesar Devolución" onAction="#onProcesarDevolucion" styleClass="btn-success" />
+                                    </children>
+                                </HBox>
+
+                                <Label text="Préstamos en Circulación:" styleClass="card-title" />
+                                <TableView fx:id="tblPrestamosActivos" prefHeight="170.0">
+                                    <columns>
+                                        <TableColumn fx:id="colFolio" text="Folio" prefWidth="110.0" />
+                                        <TableColumn fx:id="colMat" text="Matrícula" prefWidth="90.0" />
+                                        <TableColumn fx:id="colLector" text="Nombre Lector" prefWidth="180.0" />
+                                        <TableColumn fx:id="colLibro" text="Título Libro" prefWidth="220.0" />
+                                        <TableColumn fx:id="colCodigo" text="Tarjeta / Código" prefWidth="120.0" />
+                                        <TableColumn fx:id="colFechaPrest" text="Salida" prefWidth="90.0" />
+                                        <TableColumn fx:id="colFechaLimite" text="Límite" prefWidth="90.0" />
+                                        <TableColumn fx:id="colEstado" text="Estatus" prefWidth="100.0" />
+                                    </columns>
+                                </TableView>
+
+                                <Label text="Multas Pendientes de Cobro ($20 pesos por cada día hábil de retraso):" styleClass="card-title" />
+                                <TableView fx:id="tblMultas" prefHeight="150.0">
+                                    <columns>
+                                        <TableColumn fx:id="colMulId" text="Folio Multa" prefWidth="110.0" />
+                                        <TableColumn fx:id="colMulMat" text="Matrícula" prefWidth="100.0" />
+                                        <TableColumn fx:id="colMulLector" text="Nombre Deudor" prefWidth="210.0" />
+                                        <TableColumn fx:id="colMulMonto" text="Monto ($20/día)" prefWidth="110.0" />
+                                        <TableColumn fx:id="colMulMotivo" text="Motivo del Adeudo" prefWidth="350.0" />
+                                        <TableColumn fx:id="colMulEstado" text="Estatus Pago" prefWidth="110.0" />
+                                    </columns>
+                                </TableView>
+
+                                <HBox spacing="12.0">
+                                    <children>
+                                        <Button text="💵 Cobrar Multa en Caja y Liberar" onAction="#onCobrarMulta" styleClass="btn-primary" />
+                                        <Button text="🛡️ Condonar Multa (Jefatura)" onAction="#onCondonarMulta" styleClass="btn-secondary" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </content>
+                </Tab>
+
+                <!-- TAB 4: CATÁLOGO DEWEY, TEMAS Y LECTOR ACTUAL -->
+                <Tab text="📚 Catálogo Dewey y Temas">
+                    <content>
+                        <VBox spacing="12.0">
+                            <padding>
+                                <Insets bottom="18.0" left="18.0" right="18.0" top="18.0" />
+                            </padding>
+                            <children>
+                                <!-- Buscador con Palabras Clave y Recomendador de Temas -->
+                                <VBox spacing="10.0" styleClass="card-panel">
+                                    <children>
+                                        <HBox spacing="12.0" alignment="CENTER_LEFT">
+                                            <children>
+                                                <Label text="🔍 Buscar por Palabras Clave / Temas:" style="-fx-font-weight: bold;" />
+                                                <TextField fx:id="txtFiltroCatalogo" promptText="Ej. suelos, cimentaciones, calidad, concreto, incoterms, calculo..." prefWidth="340.0" />
+                                                <Label text="Recomendador de Temas:" style="-fx-font-weight: bold;" />
+                                                <ComboBox fx:id="cbTemasRecomendados" prefWidth="250.0" onAction="#onTemaRecomendadoSeleccionado" />
+                                            </children>
+                                        </HBox>
+                                        <!-- Botones de Acceso Rápido a Temas Sugeridos -->
+                                        <HBox spacing="8.0" alignment="CENTER_LEFT">
+                                            <children>
+                                                <Label text="Sugerencias rápidas:" style="-fx-font-size: 11px; -fx-text-fill: #718096;" />
+                                                <Button text="Suelos y Geotecnia" onAction="#onSugerenciaSuelos" style="-fx-font-size: 11px;" />
+                                                <Button text="Concreto y Estructuras" onAction="#onSugerenciaConcreto" style="-fx-font-size: 11px;" />
+                                                <Button text="Investigación Operaciones" onAction="#onSugerenciaOperaciones" style="-fx-font-size: 11px;" />
+                                                <Button text="Calidad y Seis Sigma" onAction="#onSugerenciaCalidad" style="-fx-font-size: 11px;" />
+                                                <Button text="Incoterms y Aduanas" onAction="#onSugerenciaIncoterms" style="-fx-font-size: 11px;" />
+                                                <Button text="Cálculo" onAction="#onSugerenciaCalculo" style="-fx-font-size: 11px;" />
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+
+                                <!-- Tabla que muestra Dewey, ISBN, Título, Estante y Lector Actual -->
+                                <TableView fx:id="tblCatalogo" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="colDewey" text="Clasif. Dewey" prefWidth="110.0" />
+                                        <TableColumn fx:id="colIsbn" text="ISBN" prefWidth="130.0" />
+                                        <TableColumn fx:id="colTit" text="Título de la Obra" prefWidth="230.0" />
+                                        <TableColumn fx:id="colAut" text="Autor" prefWidth="140.0" />
+                                        <TableColumn fx:id="colCar" text="Carrera" prefWidth="130.0" />
+                                        <TableColumn fx:id="colEst" text="Estante" prefWidth="90.0" />
+                                        <TableColumn fx:id="colDisp" text="Copias" prefWidth="70.0" />
+                                        <TableColumn fx:id="colLectorActual" text="Lector Actual / Estatus Préstamo" prefWidth="220.0" />
+                                    </columns>
+                                </TableView>
+                            </children>
+                        </VBox>
+                    </content>
+                </Tab>
+
+                <!-- TAB 5: REGISTRO DE ENTRADA Y COMPUTADORAS -->
+                <Tab text="🚪 Entrada y Centro de Cómputo">
+                    <content>
+                        <VBox spacing="14.0">
+                            <padding>
+                                <Insets bottom="18.0" left="20.0" right="20.0" top="18.0" />
+                            </padding>
+                            <children>
+                                <HBox spacing="14.0" alignment="CENTER_LEFT" styleClass="card-panel">
+                                    <children>
+                                        <Label text="Matrícula del Visitante:" style="-fx-font-weight: bold;" />
+                                        <TextField fx:id="txtMatriculaAcceso" promptText="Matrícula del alumno/docente..." prefWidth="180.0" />
+                                        
+                                        <Label text="Servicio:" style="-fx-font-weight: bold;" />
+                                        <ComboBox fx:id="cbTipoServicio" prefWidth="190.0" onAction="#onTipoServicioCambio" />
+
+                                        <Label fx:id="lblPcTitulo" text="Equipo PC:" style="-fx-font-weight: bold;" />
+                                        <ComboBox fx:id="cbComputadoras" prefWidth="100.0" />
+
+                                        <Label fx:id="lblHorasTitulo" text="Horas:" style="-fx-font-weight: bold;" />
+                                        <Spinner fx:id="spnHorasPc" prefWidth="80.0" />
+
+                                        <Button text="✔ Registrar Entrada" onAction="#onRegistrarAcceso" styleClass="btn-primary" />
+                                    </children>
+                                </HBox>
+
+                                <Label text="Registro de Visitantes y Sesiones Activas en Centro de Cómputo:" styleClass="card-title" />
+                                <TableView fx:id="tblAccesos" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="colAccFolio" text="Folio" prefWidth="90.0" />
+                                        <TableColumn fx:id="colAccMat" text="Matrícula" prefWidth="100.0" />
+                                        <TableColumn fx:id="colAccNombre" text="Nombre del Usuario" prefWidth="220.0" />
+                                        <TableColumn fx:id="colAccCarrera" text="Carrera" prefWidth="150.0" />
+                                        <TableColumn fx:id="colAccServicio" text="Servicio Solicitado" prefWidth="180.0" />
+                                        <TableColumn fx:id="colAccPc" text="Equipo PC" prefWidth="90.0" />
+                                        <TableColumn fx:id="colAccEntrada" text="Hora Entrada" prefWidth="110.0" />
+                                        <TableColumn fx:id="colAccLimite" text="Hora Límite PC" prefWidth="110.0" />
+                                        <TableColumn fx:id="colAccEstado" text="Estatus" prefWidth="100.0" />
+                                    </columns>
+                                </TableView>
+
+                                <HBox spacing="12.0">
+                                    <children>
+                                        <Button text="⏹️ Liberar Computadora / Finalizar Sesión" onAction="#onFinalizarSesionPc" styleClass="btn-danger" />
+                                        <Region HBox.hgrow="ALWAYS" />
+                                        <Label text="Las computadoras se asignan en bloques de horas autorizadas." style="-fx-text-fill: #718096; -fx-font-size: 11px;" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </content>
+                </Tab>
+
+                <!-- TAB 6: LECTORES Y CONSTANCIA DE NO ADEUDO -->
+                <Tab text="👥 Lectores y No Adeudo">
+                    <content>
+                        <VBox spacing="12.0">
+                            <padding>
+                                <Insets bottom="18.0" left="20.0" right="20.0" top="18.0" />
+                            </padding>
+                            <children>
+                                <HBox spacing="15.0" alignment="CENTER_LEFT">
+                                    <children>
+                                        <Label text="Padrón Institucional de Lectores FIT:" styleClass="card-title" />
+                                        <Region HBox.hgrow="ALWAYS" />
+                                        <Button text="📜 Emitir Constancia Oficial de No Adeudo (Titulación)" 
+                                                onAction="#onGenerarCartaNoAdeudo" styleClass="btn-primary" />
+                                    </children>
+                                </HBox>
+
+                                <TableView fx:id="tblLectores" prefHeight="240.0">
+                                    <columns>
+                                        <TableColumn fx:id="colLecMat" text="Matrícula" prefWidth="100.0" />
+                                        <TableColumn fx:id="colLecNom" text="Nombre Completo" prefWidth="220.0" />
+                                        <TableColumn fx:id="colLecTipo" text="Tipo" prefWidth="100.0" />
+                                        <TableColumn fx:id="colLecCar" text="Carrera" prefWidth="180.0" />
+                                        <TableColumn fx:id="colLecEmail" text="Correo Institucional" prefWidth="180.0" />
+                                        <TableColumn fx:id="colLecLibros" text="Préstamos Activos" prefWidth="130.0" />
+                                        <TableColumn fx:id="colLecAdeudo" text="Adeudo ($)" prefWidth="100.0" />
+                                        <TableColumn fx:id="colLecSem" text="Semáforo" prefWidth="130.0" />
+                                    </columns>
+                                </TableView>
+
+                                <Label text="Vista Previa de la Constancia Oficial con Membrete:" styleClass="card-title" />
+                                <TextArea fx:id="txtCartaNoAdeudo" editable="false" prefHeight="190.0"
+                                          style="-fx-font-family: 'Courier New', monospace; -fx-font-size: 12px;" />
+                            </children>
+                        </VBox>
+                    </content>
+                </Tab>
+
+                <!-- TAB 7: REPORTES Y CORTE DE CAJA -->
+                <Tab text="📊 Reportes y Corte de Caja">
+                    <content>
+                        <VBox spacing="14.0">
+                            <padding>
+                                <Insets bottom="18.0" left="20.0" right="20.0" top="18.0" />
+                            </padding>
+                            <children>
+                                <HBox spacing="12.0" alignment="CENTER_LEFT" styleClass="card-panel">
+                                    <children>
+                                        <Button text="💰 Corte de Caja de Turno" onAction="#onMostrarCorteCaja" styleClass="btn-primary" />
+                                        <Button text="📋 Padrón de Morosos FIT" onAction="#onMostrarReporteMorosos" styleClass="btn-danger" />
+                                        <Button text="📊 Demanda por Carrera (CACEI)" onAction="#onMostrarStatsCarrera" styleClass="btn-success" />
+                                        <Region HBox.hgrow="ALWAYS" />
+                                        <Button text="💾 Exportar a Archivo (.txt)" onAction="#onExportarReporteTXT" styleClass="btn-secondary" />
+                                    </children>
+                                </HBox>
+
+                                <TextArea fx:id="txtReporteSalida" editable="false" VBox.vgrow="ALWAYS"
+                                          style="-fx-font-family: 'Courier New', monospace; -fx-font-size: 12px;" />
+                            </children>
+                        </VBox>
+                    </content>
+                </Tab>
+
+            </tabs>
+        </TabPane>
+    </center>
+
+    <!-- BARRA INFERIOR DE ESTADO -->
+    <bottom>
+        <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="status-bar">
+            <children>
+                <Label text="🟢 Sistema en Línea | Base Institucional Conectada | Facultad de Ingeniería FIT" 
+                       style="-fx-font-size: 11px; -fx-text-fill: #4A5568;" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Label text="Sistema Dewey · Folios Consecutivos · 2 Días Hábiles · Prórrogas (Máx 2) · Cómputo" 
+                       style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #718096;" />
+            </children>
+        </HBox>
+    </bottom>
+
+</BorderPane>

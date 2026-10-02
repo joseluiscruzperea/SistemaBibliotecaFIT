@@ -1,0 +1,188 @@
+/* Estilos CSS modernos para el Sistema Integral de Biblioteca FIT UAT */
+
+.root {
+    -fx-font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+    -fx-background-color: #F4F6F9;
+}
+
+/* Header Institucional */
+.header-bar {
+    -fx-background-color: #0B2F4C;
+    -fx-padding: 12 20 12 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 6, 0, 0, 2);
+}
+
+.header-title {
+    -fx-font-size: 19px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFFFFF;
+}
+
+.header-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #B0C4DE;
+    -fx-font-weight: 500;
+}
+
+.header-badge {
+    -fx-font-size: 12px;
+    -fx-text-fill: #F6AD55;
+    -fx-font-weight: bold;
+}
+
+/* TabPane */
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: #E2E8F0;
+}
+
+.tab-pane .tab {
+    -fx-background-color: #CBD5E0;
+    -fx-padding: 6 16;
+    -fx-background-radius: 6 6 0 0;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: #0B2F4C;
+}
+
+.tab-pane .tab:selected .tab-label {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+}
+
+.tab-pane .tab .tab-label {
+    -fx-text-fill: #2D3748;
+    -fx-font-size: 13px;
+}
+
+/* Botones con estilo moderno */
+.btn-primary {
+    -fx-background-color: #2B6CB0;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 8 16;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.btn-primary:hover {
+    -fx-background-color: #1A4971;
+}
+
+.btn-success {
+    -fx-background-color: #2F855A;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 8 16;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.btn-success:hover {
+    -fx-background-color: #22543D;
+}
+
+.btn-danger {
+    -fx-background-color: #C53030;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 8 16;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.btn-danger:hover {
+    -fx-background-color: #9B1C1C;
+}
+
+.btn-secondary {
+    -fx-background-color: #E2E8F0;
+    -fx-text-fill: #2D3748;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 8 16;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.btn-secondary:hover {
+    -fx-background-color: #CBD5E0;
+}
+
+/* Paneles de Tarjetas (Cards) */
+.card-panel {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 8;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 8;
+    -fx-padding: 16;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 4, 0, 0, 1);
+}
+
+.card-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2D3748;
+}
+
+/* Semáforos */
+.semaforo-espera {
+    -fx-background-color: #EDF2F7;
+    -fx-border-color: #CBD5E0;
+    -fx-border-width: 2;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-padding: 16;
+}
+
+.semaforo-verde {
+    -fx-background-color: #DEF7EC;
+    -fx-border-color: #31C48D;
+    -fx-border-width: 2.5;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-padding: 16;
+}
+
+.semaforo-rojo {
+    -fx-background-color: #FDE8E8;
+    -fx-border-color: #F98080;
+    -fx-border-width: 2.5;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-padding: 16;
+}
+
+.semaforo-amarillo {
+    -fx-background-color: #FEF08A;
+    -fx-border-color: #EAB308;
+    -fx-border-width: 2.5;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-padding: 16;
+}
+
+/* Tablas */
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 6;
+}
+
+.table-view .column-header {
+    -fx-background-color: #EDF2F7;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2D3748;
+    -fx-font-size: 12px;
+}
+
+/* Footer de Estado */
+.status-bar {
+    -fx-background-color: #EDF2F7;
+    -fx-border-color: #CBD5E0;
+    -fx-border-width: 1 0 0 0;
+    -fx-padding: 6 16;
+}
