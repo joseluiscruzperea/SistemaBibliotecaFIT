@@ -26,13 +26,10 @@ import java.util.ResourceBundle;
 
 /**
  * Controlador principal del patrón MVC en JavaFX.
- * Incorpora las observaciones y requerimientos solicitados:
- * - Dewey, Folios Únicos de Tarjeta y Lector Actual en catálogo.
- * - Filtro de palabras clave y temas recomendados.
- * - Préstamo de 2 días hábiles (viernes a martes; fines de semana excluidos).
- * - Prórrogas solicitadas solo con matrícula (máximo 2 prórrogas).
- * - Multa de $20.00 pesos por día hábil de mora.
- * - Recepción de usuarios solo con matrícula (Consulta en Sala o Cómputo con horas asignadas).
+ * Gestiona el menú lateral (sidebar), navegación entre vistas y lógica operativa:
+ * - Menú lateral moderno (Dashboard, Catálogo, Préstamos, Prórrogas, Devoluciones, Cómputo, Usuarios, Reportes).
+ * - Catálogo idéntico a la interfaz del laptop (Dewey, Lector actual, Disponibilidad y filtros).
+ * - Plazo de 2 días hábiles (viernes a martes), prórrogas solo con matrícula y multas a $20/día hábil.
  */
 public class MainController implements Initializable {
 
@@ -43,13 +40,56 @@ public class MainController implements Initializable {
     private Ejemplar ejemplarActualVentanilla;
 
     // ==========================================
-    // INYECCIÓN DE COMPONENTES FXML
+    // INYECCIÓN DE COMPONENTES DEL MENÚ LATERAL Y TOP BAR
     // ==========================================
+    @FXML private Button btnNavDashboard;
+    @FXML private Button btnNavCatalogo;
+    @FXML private Button btnNavPrestamos;
+    @FXML private Button btnNavProrrogas;
+    @FXML private Button btnNavDevoluciones;
+    @FXML private Button btnNavComputo;
+    @FXML private Button btnNavUsuarios;
+    @FXML private Button btnNavReportes;
 
-    @FXML private Label lblOperadorHeader;
+    @FXML private Label lblTopBarTitle;
     @FXML private Label lblFechaHeader;
+    @FXML private Label lblOperadorHeader;
+    @FXML private Label lblOperadorFooter;
 
-    // TAB 1: VENTANILLA EXPRESS
+    // ==========================================
+    // VISTAS DEL STACKPANE CENTRAL
+    // ==========================================
+    @FXML private VBox viewDashboard;
+    @FXML private VBox viewCatalogo;
+    @FXML private VBox viewPrestamos;
+    @FXML private VBox viewProrrogas;
+    @FXML private VBox viewDevoluciones;
+    @FXML private VBox viewComputo;
+    @FXML private VBox viewUsuarios;
+    @FXML private VBox viewReportes;
+
+    // DASHBOARD KPI LABELS
+    @FXML private Label lblKpiTotalLibros;
+    @FXML private Label lblKpiPrestamosActivos;
+    @FXML private Label lblKpiMultasPendientes;
+    @FXML private Label lblKpiComputadorasUso;
+
+    // VISTA 2: CATÁLOGO DE LIBROS (FOTO LAPTOP)
+    @FXML private TextField txtFiltroCatalogo;
+    @FXML private ComboBox<String> cbTemasRecomendados;
+    @FXML private ComboBox<String> cbFiltroEstado;
+    @FXML private CheckBox chkSoloDisponibles;
+    @FXML private Label lblConteoResultados;
+    @FXML private TableView<Libro> tblCatalogo;
+    @FXML private TableColumn<Libro, String> colTit;
+    @FXML private TableColumn<Libro, String> colCar;
+    @FXML private TableColumn<Libro, String> colDewey;
+    @FXML private TableColumn<Libro, String> colIsbn;
+    @FXML private TableColumn<Libro, String> colEst;
+    @FXML private TableColumn<Libro, String> colDisp;
+    @FXML private TableColumn<Libro, String> colLectorActual;
+
+    // VISTA 3: VENTANILLA EXPRESS
     @FXML private TextField txtMatricula;
     @FXML private Label lblUsuarioInfo;
     @FXML private TextField txtCodigoBarras;
@@ -61,7 +101,7 @@ public class MainController implements Initializable {
     @FXML private Label lblSemaforoDetalle;
     @FXML private TextArea txtTicketVentanilla;
 
-    // TAB 2: PRÓRROGAS
+    // VISTA 4: PRÓRROGAS (SOLO MATRÍCULA)
     @FXML private TextField txtMatriculaProrroga;
     @FXML private TableView<Prestamo> tblPrestamosProrroga;
     @FXML private TableColumn<Prestamo, String> colProFolio;
@@ -72,7 +112,7 @@ public class MainController implements Initializable {
     @FXML private TableColumn<Prestamo, String> colProFechaLim;
     @FXML private TableColumn<Prestamo, String> colProProrrogas;
 
-    // TAB 3: DEVOLUCIONES Y MULTAS
+    // VISTA 5: DEVOLUCIONES Y MULTAS
     @FXML private TextField txtDevCodigoBarras;
     @FXML private ComboBox<EstadoLibro> cbDevCondicion;
     @FXML private DatePicker dpDevFechaRetorno;
@@ -94,20 +134,7 @@ public class MainController implements Initializable {
     @FXML private TableColumn<Multa, String> colMulMotivo;
     @FXML private TableColumn<Multa, String> colMulEstado;
 
-    // TAB 4: CATÁLOGO DEWEY Y TEMAS
-    @FXML private TextField txtFiltroCatalogo;
-    @FXML private ComboBox<String> cbTemasRecomendados;
-    @FXML private TableView<Libro> tblCatalogo;
-    @FXML private TableColumn<Libro, String> colDewey;
-    @FXML private TableColumn<Libro, String> colIsbn;
-    @FXML private TableColumn<Libro, String> colTit;
-    @FXML private TableColumn<Libro, String> colAut;
-    @FXML private TableColumn<Libro, String> colCar;
-    @FXML private TableColumn<Libro, String> colEst;
-    @FXML private TableColumn<Libro, String> colDisp;
-    @FXML private TableColumn<Libro, String> colLectorActual;
-
-    // TAB 5: RECEPCIÓN Y CÓMPUTO
+    // VISTA 6: RECEPCIÓN Y CÓMPUTO
     @FXML private TextField txtMatriculaAcceso;
     @FXML private ComboBox<TipoServicio> cbTipoServicio;
     @FXML private Label lblPcTitulo;
@@ -125,7 +152,7 @@ public class MainController implements Initializable {
     @FXML private TableColumn<RegistroAcceso, String> colAccLimite;
     @FXML private TableColumn<RegistroAcceso, String> colAccEstado;
 
-    // TAB 6: LECTORES Y NO ADEUDO
+    // VISTA 7: LECTORES Y NO ADEUDO
     @FXML private TableView<Usuario> tblLectores;
     @FXML private TableColumn<Usuario, String> colLecMat;
     @FXML private TableColumn<Usuario, String> colLecNom;
@@ -137,7 +164,7 @@ public class MainController implements Initializable {
     @FXML private TableColumn<Usuario, String> colLecSem;
     @FXML private TextArea txtCartaNoAdeudo;
 
-    // TAB 7: REPORTES
+    // VISTA 8: REPORTES Y CORTE
     @FXML private TextArea txtReporteSalida;
 
     // Listas observables
@@ -175,10 +202,14 @@ public class MainController implements Initializable {
         cbDevCondicion.setValue(EstadoLibro.DISPONIBLE);
         dpDevFechaRetorno.setValue(LocalDate.now());
 
-        // Configuración de Recomendador de Temas
+        // Configuración de Filtros de Catálogo
         cbTemasRecomendados.setItems(FXCollections.observableArrayList(service.getTemasRecomendados()));
         cbTemasRecomendados.setValue("TODOS LOS TEMAS");
-        txtFiltroCatalogo.textProperty().addListener((obs, oldV, newV) -> aplicarFiltrosCatalogo(newV));
+
+        cbFiltroEstado.setItems(FXCollections.observableArrayList("Todos los estados", "Disponibles", "Prestados", "Solo Sala"));
+        cbFiltroEstado.setValue("Todos los estados");
+
+        txtFiltroCatalogo.textProperty().addListener((obs, oldV, newV) -> aplicarFiltrosCatalogo());
 
         // Configuración de Recepción y Cómputo
         cbTipoServicio.setItems(FXCollections.observableArrayList(TipoServicio.CONSULTA_SALA, TipoServicio.USO_COMPUTADORA));
@@ -198,6 +229,67 @@ public class MainController implements Initializable {
         txtTicketVentanilla.setText("--- Ninguna transacción procesada en este momento ---");
         txtCartaNoAdeudo.setText("--- Seleccione un alumno o docente y presione 'Emitir Constancia Oficial de No Adeudo' ---");
         txtReporteSalida.setText(service.getCorteCajaActual().generarTicketTexto());
+
+        // Actualizar KPIs y seleccionar por defecto la vista Catálogo de Libros (como en la foto)
+        actualizarKpis();
+        mostrarVistaCatalogo();
+    }
+
+    // ==========================================
+    // NAVEGACIÓN DEL MENÚ LATERAL (SIDEBAR)
+    // ==========================================
+
+    private void switchView(VBox activeView, Button activeButton, String title) {
+        VBox[] allViews = {viewDashboard, viewCatalogo, viewPrestamos, viewProrrogas, viewDevoluciones, viewComputo, viewUsuarios, viewReportes};
+        Button[] allButtons = {btnNavDashboard, btnNavCatalogo, btnNavPrestamos, btnNavProrrogas, btnNavDevoluciones, btnNavComputo, btnNavUsuarios, btnNavReportes};
+
+        for (VBox v : allViews) {
+            if (v != null) {
+                boolean isTarget = (v == activeView);
+                v.setVisible(isTarget);
+                v.setManaged(isTarget);
+            }
+        }
+
+        for (Button b : allButtons) {
+            if (b != null) {
+                b.getStyleClass().remove("sidebar-btn-active");
+                if (b == activeButton) {
+                    b.getStyleClass().add("sidebar-btn-active");
+                }
+            }
+        }
+
+        if (lblTopBarTitle != null) {
+            lblTopBarTitle.setText("BiblioGestión · " + title);
+        }
+    }
+
+    @FXML public void mostrarVistaDashboard() { switchView(viewDashboard, btnNavDashboard, "Dashboard de Indicadores"); actualizarKpis(); }
+    @FXML public void mostrarVistaCatalogo() { switchView(viewCatalogo, btnNavCatalogo, "Catálogo de Libros"); aplicarFiltrosCatalogo(); }
+    @FXML public void mostrarVistaPrestamos() { switchView(viewPrestamos, btnNavPrestamos, "Ventanilla Express de Préstamos"); }
+    @FXML public void mostrarVistaProrrogas() { switchView(viewProrrogas, btnNavProrrogas, "Prórrogas y Renovaciones"); }
+    @FXML public void mostrarVistaDevoluciones() { switchView(viewDevoluciones, btnNavDevoluciones, "Devoluciones y Control de Sanciones"); }
+    @FXML public void mostrarVistaComputo() { switchView(viewComputo, btnNavComputo, "Recepción y Centro de Cómputo"); }
+    @FXML public void mostrarVistaUsuarios() { switchView(viewUsuarios, btnNavUsuarios, "Padrón de Lectores y No Adeudo"); }
+    @FXML public void mostrarVistaReportes() { switchView(viewReportes, btnNavReportes, "Reportes Gerenciales y Corte de Caja"); }
+
+    private void actualizarKpis() {
+        if (lblKpiTotalLibros != null) {
+            lblKpiTotalLibros.setText(service.getLibros().size() + " Obras");
+        }
+        if (lblKpiPrestamosActivos != null) {
+            long activos = service.getPrestamos().stream().filter(p -> p.getEstado() == EstadoPrestamo.ACTIVO).count();
+            lblKpiPrestamosActivos.setText(activos + " Préstamos");
+        }
+        if (lblKpiMultasPendientes != null) {
+            lblKpiMultasPendientes.setText(service.getMultasPendientes().size() + " Deudores");
+        }
+        if (lblKpiComputadorasUso != null) {
+            long pcsUso = service.getAccesosBiblioteca().stream()
+                    .filter(a -> a.isActivo() && a.getTipoServicio() == TipoServicio.USO_COMPUTADORA).count();
+            lblKpiComputadorasUso.setText(pcsUso + " Equipos");
+        }
     }
 
     // ==========================================
@@ -243,13 +335,14 @@ public class MainController implements Initializable {
     }
 
     private void configurarTablaCatalogo() {
+        colTit.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getTitulo() + "\n" + c.getValue().getAutor()));
+        colCar.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getCarrera().getNombreCompleto()));
         colDewey.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getClasificacionDewey()));
         colIsbn.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getIsbn()));
-        colTit.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getTitulo()));
-        colAut.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getAutor()));
-        colCar.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getCarrera().getNombreCompleto()));
         colEst.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getUbicacionEstante()));
-        colDisp.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getCopiasDisponibles() + " / " + c.getValue().getCopiasTotales()));
+        colDisp.setCellValueFactory(c -> new SimpleStringProperty(
+            c.getValue().getCopiasDisponibles() + " de " + c.getValue().getCopiasTotales() + " disponibles"
+        ));
         colLectorActual.setCellValueFactory(c -> {
             StringBuilder sb = new StringBuilder();
             for (Ejemplar ej : c.getValue().getEjemplares()) {
@@ -257,7 +350,10 @@ public class MainController implements Initializable {
                     sb.append("[").append(ej.getFolioTarjeta()).append("] ").append(ej.getLectorActualInfo()).append(" | ");
                 }
             }
-            return new SimpleStringProperty(sb.length() > 0 ? sb.toString() : "Disponible en Sala");
+            if (c.getValue().isEsConsultaInterna()) {
+                return new SimpleStringProperty("🔴 Solo Consulta en Sala (RN-03)");
+            }
+            return new SimpleStringProperty(sb.length() > 0 ? sb.toString() : "🟢 Disponible en Estantería");
         });
         tblCatalogo.setItems(olLibros);
     }
@@ -290,7 +386,60 @@ public class MainController implements Initializable {
     }
 
     // ==========================================
-    // TAB 1: VENTANILLA EXPRESS (2 DÍAS HÁBILES)
+    // VISTA 2: CATÁLOGO Y FILTROS
+    // ==========================================
+
+    @FXML public void onChkSoloDisponiblesCambio(ActionEvent e) { aplicarFiltrosCatalogo(); }
+    @FXML public void onFiltroEstadoCambio(ActionEvent e) { aplicarFiltrosCatalogo(); }
+
+    @FXML
+    public void onTemaRecomendadoSeleccionado(ActionEvent e) {
+        String tema = cbTemasRecomendados.getValue();
+        if (tema == null || tema.equals("TODOS LOS TEMAS")) {
+            txtFiltroCatalogo.clear();
+        } else {
+            String clave = tema.split(" ")[0].toLowerCase();
+            txtFiltroCatalogo.setText(clave);
+        }
+        aplicarFiltrosCatalogo();
+    }
+
+    private void aplicarFiltrosCatalogo() {
+        String texto = txtFiltroCatalogo != null ? txtFiltroCatalogo.getText() : "";
+        var lista = service.buscarLibrosPorPalabraClave(texto);
+
+        // Filtro: Solo disponibles
+        if (chkSoloDisponibles != null && chkSoloDisponibles.isSelected()) {
+            lista.removeIf(l -> l.getCopiasDisponibles() == 0);
+        }
+
+        // Filtro: Estado general
+        if (cbFiltroEstado != null && cbFiltroEstado.getValue() != null) {
+            String est = cbFiltroEstado.getValue();
+            if (est.equals("Disponibles")) {
+                lista.removeIf(l -> l.getCopiasDisponibles() == 0);
+            } else if (est.equals("Prestados")) {
+                lista.removeIf(l -> l.getCopiasDisponibles() == l.getCopiasTotales());
+            } else if (est.equals("Solo Sala")) {
+                lista.removeIf(l -> !l.isEsConsultaInterna());
+            }
+        }
+
+        olLibros.setAll(lista);
+        if (lblConteoResultados != null) {
+            lblConteoResultados.setText("Resultados: " + lista.size() + " libros encontrados");
+        }
+    }
+
+    @FXML public void onSugerenciaSuelos() { txtFiltroCatalogo.setText("suelos"); }
+    @FXML public void onSugerenciaConcreto() { txtFiltroCatalogo.setText("concreto"); }
+    @FXML public void onSugerenciaOperaciones() { txtFiltroCatalogo.setText("operaciones"); }
+    @FXML public void onSugerenciaCalidad() { txtFiltroCatalogo.setText("calidad"); }
+    @FXML public void onSugerenciaIncoterms() { txtFiltroCatalogo.setText("incoterms"); }
+    @FXML public void onSugerenciaCalculo() { txtFiltroCatalogo.setText("calculo"); }
+
+    // ==========================================
+    // VISTA 3: VENTANILLA EXPRESS
     // ==========================================
 
     @FXML
@@ -332,13 +481,13 @@ public class MainController implements Initializable {
                 usuarioActualVentanilla.getNombreCompleto(),
                 usuarioActualVentanilla.getTipo().getDescripcion(),
                 usuarioActualVentanilla.getCarrera().getAbreviatura()));
-            lblUsuarioInfo.setStyle("-fx-text-fill: #2B6CB0; -fx-font-weight: bold;");
+            lblUsuarioInfo.setStyle("-fx-text-fill: #4F46E5; -fx-font-weight: bold;");
 
             actualizarSemaforo(usuarioActualVentanilla);
         } else {
             usuarioActualVentanilla = null;
             lblUsuarioInfo.setText("❌ Matrícula no encontrada en Servicios Escolares.");
-            lblUsuarioInfo.setStyle("-fx-text-fill: #E53E3E; -fx-font-weight: bold;");
+            lblUsuarioInfo.setStyle("-fx-text-fill: #EF4444; -fx-font-weight: bold;");
             setSemaforo("semaforo-rojo", "❌ MATRÍCULA NO REGISTRADA", "El alumno o docente no aparece en la base de la FIT.");
         }
     }
@@ -352,11 +501,11 @@ public class MainController implements Initializable {
                 " | Dewey: " + ejemplarActualVentanilla.getLibro().getClasificacionDewey() + 
                 " | Tarjeta: " + ejemplarActualVentanilla.getFolioTarjeta() + 
                 " (" + ejemplarActualVentanilla.getLibro().getUbicacionEstante() + ")");
-            lblLibroInfo.setStyle("-fx-text-fill: #2B6CB0;");
+            lblLibroInfo.setStyle("-fx-text-fill: #4F46E5;");
         } else {
             ejemplarActualVentanilla = null;
             lblLibroInfo.setText("❌ Ejemplar o Tarjeta no encontrada: " + cod);
-            lblLibroInfo.setStyle("-fx-text-fill: #E53E3E;");
+            lblLibroInfo.setStyle("-fx-text-fill: #EF4444;");
         }
     }
 
@@ -406,7 +555,6 @@ public class MainController implements Initializable {
             }
         }
 
-        // Validación de reglas de negocio
         ResultadoValidacion val = service.validarPrestamo(usuarioActualVentanilla, ejemplarActualVentanilla);
         if (!val.isAprobado()) {
             setSemaforo("semaforo-rojo", "❌ PRÉSTAMO DENEGADO (" + val.getCodigoRegla() + ")", val.getMensaje());
@@ -445,6 +593,7 @@ public class MainController implements Initializable {
                 "Libro entregado. Fecha estipulada de retorno: " + p.getFechaDevolucionEsperada().format(fmt));
 
             refrescarTodasLasTablas();
+            actualizarKpis();
 
             txtCodigoBarras.clear();
             ejemplarActualVentanilla = null;
@@ -463,6 +612,7 @@ public class MainController implements Initializable {
             txtTicketVentanilla.setText("↩ ÚLTIMO PRÉSTAMO REVERTIDO EXITOSAMENTE.\nEl ejemplar volvió a estar Disponible y se liberó la cuota del lector.");
             setSemaforo("semaforo-amarillo", "↩ PRÉSTAMO CANCELADO", "Se revirtió la asignación errónea previa.");
             refrescarTodasLasTablas();
+            actualizarKpis();
             onLimpiarVentanilla();
         } else {
             mostrarAlerta(Alert.AlertType.INFORMATION, "Deshacer", "No hay préstamos activos recientes para revertir.");
@@ -476,16 +626,16 @@ public class MainController implements Initializable {
         usuarioActualVentanilla = null;
         ejemplarActualVentanilla = null;
         lblUsuarioInfo.setText("Esperando escaneo de credencial...");
-        lblUsuarioInfo.setStyle("-fx-text-fill: #718096; -fx-font-style: italic;");
+        lblUsuarioInfo.setStyle("-fx-text-fill: #64748B; -fx-font-style: italic;");
         lblLibroInfo.setText("Esperando tarjeta o código de libro...");
-        lblLibroInfo.setStyle("-fx-text-fill: #718096; -fx-font-style: italic;");
+        lblLibroInfo.setStyle("-fx-text-fill: #64748B; -fx-font-style: italic;");
         setSemaforo("semaforo-espera", "⚪ SEMÁFORO: EN ESPERA DE LECTURA", 
             "Escanee una credencial para validar en tiempo real solvencia, adeudos ($20/día) y límite de libros.");
         txtMatricula.requestFocus();
     }
 
     // ==========================================
-    // TAB 2: PRÓRROGAS (SOLO CON MATRÍCULA)
+    // VISTA 4: PRÓRROGAS
     // ==========================================
 
     @FXML
@@ -526,7 +676,7 @@ public class MainController implements Initializable {
     }
 
     // ==========================================
-    // TAB 3: DEVOLUCIONES Y MULTAS ($20/DÍA)
+    // VISTA 5: DEVOLUCIONES Y MULTAS
     // ==========================================
 
     @FXML
@@ -558,6 +708,7 @@ public class MainController implements Initializable {
 
         txtDevCodigoBarras.clear();
         refrescarTodasLasTablas();
+        actualizarKpis();
     }
 
     @FXML
@@ -573,6 +724,7 @@ public class MainController implements Initializable {
             String.format("Cobro de $%.2f registrado en efectivo en caja. El usuario %s ha sido desbloqueado.", 
             sel.getMonto(), sel.getUsuario().getMatricula()));
         refrescarTodasLasTablas();
+        actualizarKpis();
     }
 
     @FXML
@@ -592,37 +744,12 @@ public class MainController implements Initializable {
             service.condonarMulta(sel.getIdMulta(), mot, "Getsel Giadans (Jefa FIT)");
             mostrarAlerta(Alert.AlertType.INFORMATION, "Multa Condonada", "La sanción económica ha sido condonada.");
             refrescarTodasLasTablas();
+            actualizarKpis();
         });
     }
 
     // ==========================================
-    // TAB 4: CATÁLOGO DEWEY Y TEMAS RECOMENDADOS
-    // ==========================================
-
-    @FXML
-    public void onTemaRecomendadoSeleccionado(ActionEvent e) {
-        String tema = cbTemasRecomendados.getValue();
-        if (tema == null || tema.equals("TODOS LOS TEMAS")) {
-            olLibros.setAll(service.getLibros());
-        } else {
-            String clave = tema.split(" ")[0].toLowerCase();
-            aplicarFiltrosCatalogo(clave);
-        }
-    }
-
-    private void aplicarFiltrosCatalogo(String palabra) {
-        olLibros.setAll(service.buscarLibrosPorPalabraClave(palabra));
-    }
-
-    @FXML public void onSugerenciaSuelos() { txtFiltroCatalogo.setText("suelos"); }
-    @FXML public void onSugerenciaConcreto() { txtFiltroCatalogo.setText("concreto"); }
-    @FXML public void onSugerenciaOperaciones() { txtFiltroCatalogo.setText("operaciones"); }
-    @FXML public void onSugerenciaCalidad() { txtFiltroCatalogo.setText("calidad"); }
-    @FXML public void onSugerenciaIncoterms() { txtFiltroCatalogo.setText("incoterms"); }
-    @FXML public void onSugerenciaCalculo() { txtFiltroCatalogo.setText("calculo"); }
-
-    // ==========================================
-    // TAB 5: RECEPCIÓN Y CENTRO DE CÓMPUTO
+    // VISTA 6: RECEPCIÓN Y CÓMPUTO
     // ==========================================
 
     @FXML
@@ -660,6 +787,7 @@ public class MainController implements Initializable {
 
         txtMatriculaAcceso.clear();
         olAccesos.setAll(service.getAccesosBiblioteca());
+        actualizarKpis();
     }
 
     @FXML
@@ -677,10 +805,11 @@ public class MainController implements Initializable {
         service.finalizarSesionComputadora(sel.getIdAcceso());
         mostrarAlerta(Alert.AlertType.INFORMATION, "Sesión Concluida", "El equipo " + sel.getNumeroComputadora() + " ha sido liberado.");
         olAccesos.setAll(service.getAccesosBiblioteca());
+        actualizarKpis();
     }
 
     // ==========================================
-    // TAB 6: LECTORES Y CONSTANCIA NO ADEUDO
+    // VISTA 7: LECTORES Y NO ADEUDO
     // ==========================================
 
     @FXML
@@ -695,7 +824,7 @@ public class MainController implements Initializable {
         txtCartaNoAdeudo.setText(constancia);
 
         if (constancia.startsWith("DENEGADO")) {
-            mostrarAlerta(Alert.AlertType.ERROR, "Constancia Denegada (RN-05 / RN-06)", constancia);
+            mostrarAlerta(Alert.AlertType.ERROR, "Constancia Denegada (RN-05 / RN-10)", constancia);
         } else {
             mostrarAlerta(Alert.AlertType.INFORMATION, "Constancia Generada", 
                 "Constancia oficial de No Adeudo para " + sel.getNombreCompleto() + " emitida correctamente.");
@@ -703,7 +832,7 @@ public class MainController implements Initializable {
     }
 
     // ==========================================
-    // TAB 7: REPORTES Y CORTE DE CAJA
+    // VISTA 8: REPORTES Y CORTE DE CAJA
     // ==========================================
 
     @FXML
